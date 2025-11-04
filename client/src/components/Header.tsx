@@ -1,17 +1,18 @@
 import { useState } from "react";
+import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Menu, X } from "lucide-react";
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [location] = useLocation();
 
   const toggleMenu = () => {
     console.log('Mobile menu toggled');
     setIsMenuOpen(!isMenuOpen);
   };
 
-  const handleNavClick = (section: string) => {
-    console.log(`Navigation clicked: ${section}`);
+  const closeMenu = () => {
     setIsMenuOpen(false);
   };
 
@@ -19,53 +20,54 @@ export default function Header() {
     console.log('Donate button clicked');
   };
 
+  const isActive = (path: string) => {
+    return location === path;
+  };
+
   return (
     <header className="bg-white/95 backdrop-blur-sm sticky top-0 z-50 border-b border-border">
       <div className="max-w-6xl mx-auto px-4">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <div className="flex items-center gap-2">
-            <div className="w-10 h-10 bg-primary rounded-full flex items-center justify-center">
-              <span className="text-white font-serif font-bold text-lg">ॐ</span>
-            </div>
-            <div>
-              <div className="font-serif font-bold text-lg text-primary">ISKCON</div>
-              <div className="text-xs text-muted-foreground">Pune</div>
-            </div>
-          </div>
+          <Link href="/">
+            <a className="flex items-center gap-2">
+              <div className="w-10 h-10 bg-primary rounded-full flex items-center justify-center">
+                <span className="text-white font-serif font-bold text-lg">ॐ</span>
+              </div>
+              <div>
+                <div className="font-serif font-bold text-lg text-primary">ISKCON</div>
+                <div className="text-xs text-muted-foreground">Pune</div>
+              </div>
+            </a>
+          </Link>
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-8">
-            <button 
-              onClick={() => handleNavClick('home')}
-              className="text-foreground hover:text-primary transition-colors"
-            >
-              Home
-            </button>
-            <button 
-              onClick={() => handleNavClick('about')}
-              className="text-foreground hover:text-primary transition-colors"
-            >
-              About
-            </button>
-            <button 
-              onClick={() => handleNavClick('programs')}
-              className="text-foreground hover:text-primary transition-colors"
-            >
-              Programs
-            </button>
-            <button 
-              onClick={() => handleNavClick('schedule')}
-              className="text-foreground hover:text-primary transition-colors"
-            >
-              Schedule
-            </button>
-            <button 
-              onClick={() => handleNavClick('contact')}
-              className="text-foreground hover:text-primary transition-colors"
-            >
-              Contact
-            </button>
+            <Link href="/">
+              <a className={`transition-colors ${isActive('/') ? 'text-primary font-medium' : 'text-foreground hover:text-primary'}`}>
+                Home
+              </a>
+            </Link>
+            <Link href="/about">
+              <a className={`transition-colors ${isActive('/about') ? 'text-primary font-medium' : 'text-foreground hover:text-primary'}`}>
+                About
+              </a>
+            </Link>
+            <Link href="/programs">
+              <a className={`transition-colors ${isActive('/programs') ? 'text-primary font-medium' : 'text-foreground hover:text-primary'}`}>
+                Programs
+              </a>
+            </Link>
+            <Link href="/schedule">
+              <a className={`transition-colors ${isActive('/schedule') ? 'text-primary font-medium' : 'text-foreground hover:text-primary'}`}>
+                Schedule
+              </a>
+            </Link>
+            <Link href="/contact">
+              <a className={`transition-colors ${isActive('/contact') ? 'text-primary font-medium' : 'text-foreground hover:text-primary'}`}>
+                Contact
+              </a>
+            </Link>
           </nav>
 
           {/* Desktop CTA */}
@@ -93,36 +95,31 @@ export default function Header() {
         {isMenuOpen && (
           <div className="md:hidden py-4 border-t border-border">
             <nav className="flex flex-col space-y-4">
-              <button 
-                onClick={() => handleNavClick('home')}
-                className="text-left text-foreground hover:text-primary transition-colors py-2"
-              >
-                Home
-              </button>
-              <button 
-                onClick={() => handleNavClick('about')}
-                className="text-left text-foreground hover:text-primary transition-colors py-2"
-              >
-                About
-              </button>
-              <button 
-                onClick={() => handleNavClick('programs')}
-                className="text-left text-foreground hover:text-primary transition-colors py-2"
-              >
-                Programs
-              </button>
-              <button 
-                onClick={() => handleNavClick('schedule')}
-                className="text-left text-foreground hover:text-primary transition-colors py-2"
-              >
-                Schedule
-              </button>
-              <button 
-                onClick={() => handleNavClick('contact')}
-                className="text-left text-foreground hover:text-primary transition-colors py-2"
-              >
-                Contact
-              </button>
+              <Link href="/" onClick={closeMenu}>
+                <a className={`text-left transition-colors py-2 block ${isActive('/') ? 'text-primary font-medium' : 'text-foreground hover:text-primary'}`}>
+                  Home
+                </a>
+              </Link>
+              <Link href="/about" onClick={closeMenu}>
+                <a className={`text-left transition-colors py-2 block ${isActive('/about') ? 'text-primary font-medium' : 'text-foreground hover:text-primary'}`}>
+                  About
+                </a>
+              </Link>
+              <Link href="/programs" onClick={closeMenu}>
+                <a className={`text-left transition-colors py-2 block ${isActive('/programs') ? 'text-primary font-medium' : 'text-foreground hover:text-primary'}`}>
+                  Programs
+                </a>
+              </Link>
+              <Link href="/schedule" onClick={closeMenu}>
+                <a className={`text-left transition-colors py-2 block ${isActive('/schedule') ? 'text-primary font-medium' : 'text-foreground hover:text-primary'}`}>
+                  Schedule
+                </a>
+              </Link>
+              <Link href="/contact" onClick={closeMenu}>
+                <a className={`text-left transition-colors py-2 block ${isActive('/contact') ? 'text-primary font-medium' : 'text-foreground hover:text-primary'}`}>
+                  Contact
+                </a>
+              </Link>
               <Button 
                 onClick={handleDonate}
                 data-testid="button-donate-mobile"
