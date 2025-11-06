@@ -300,12 +300,13 @@ export default function DailySchedule() {
 
               <div>
                 <label className="block text-sm font-medium text-foreground mb-2">
-                  Phone Number
+                  Phone Number *
                 </label>
                 <input
                   type="tel"
                   value={formData.phone}
                   onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                  required
                   className="w-full px-4 py-2 border border-input rounded-md bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary"
                   placeholder="+91 98765 43210"
                   data-testid="input-join-phone"
