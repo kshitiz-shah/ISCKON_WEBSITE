@@ -260,7 +260,7 @@ export default function DailySchedule() {
             </DialogTitle>
             <DialogDescription>
               {isJoined 
-                ? `You have joined the group for ${selectedProgram?.title}.`
+                ? `You have joined ${selectedProgram?.title}. We will notify you via email and add you to the WhatsApp group.`
                 : `Fill in your details to join this program. We'll send you reminders and updates.`
               }
             </DialogDescription>
@@ -329,7 +329,7 @@ export default function DailySchedule() {
               </div>
               <p className="text-foreground font-medium mb-2" data-testid="text-joined-confirmation">Joined to the group</p>
               <p className="text-sm text-muted-foreground mb-4">
-                We'll send you updates about {selectedProgram?.title}
+                We will notify you via email and add you to the WhatsApp group.
               </p>
               <Button onClick={handleCloseDialog} variant="outline" className="w-full" data-testid="button-close-dialog">
                 Close
