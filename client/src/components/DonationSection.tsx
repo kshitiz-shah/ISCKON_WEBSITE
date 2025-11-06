@@ -81,7 +81,7 @@ export default function DonationSection() {
   };
 
   return (
-    <section className="py-16 bg-gradient-to-b from-primary/5 to-accent/5">
+    <section className="py-16 bg-gradient-to-b from-primary/5 to-accent/5" data-donate-section>
       <div className="max-w-6xl mx-auto px-4">
         <div className="text-center mb-12">
           <h2 className="text-3xl md:text-4xl font-serif font-bold text-foreground mb-4">

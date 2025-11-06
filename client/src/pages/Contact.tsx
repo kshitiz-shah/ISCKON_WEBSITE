@@ -13,14 +13,27 @@ export default function Contact() {
     subject: "",
     message: ""
   });
+  const [isSubmitted, setIsSubmitted] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Contact form submitted:', formData);
+    setIsSubmitted(true);
+    setTimeout(() => {
+      setFormData({
+        name: "",
+        email: "",
+        phone: "",
+        subject: "",
+        message: ""
+      });
+    }, 3000);
   };
 
   const handleInputChange = (field: string, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }));
+    if (isSubmitted) {
+      setIsSubmitted(false);
+    }
   };
 
   const handleSocialClick = (platform: string) => {
@@ -55,6 +68,19 @@ export default function Contact() {
                     <CardTitle className="text-2xl font-serif">Send Us a Message</CardTitle>
                   </CardHeader>
                   <CardContent>
+                    {isSubmitted && (
+                      <div className="mb-4 p-4 bg-green-50 border border-green-200 rounded-md">
+                        <div className="flex items-center gap-2 text-green-800">
+                          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                          </svg>
+                          <p className="font-medium">Submitted</p>
+                        </div>
+                        <p className="text-sm text-green-700 mt-1">
+                          Thank you for reaching out! We'll get back to you soon.
+                        </p>
+                      </div>
+                    )}
                     <form onSubmit={handleSubmit} className="space-y-4">
                       <div>
                         <label className="block text-sm font-medium text-foreground mb-2">

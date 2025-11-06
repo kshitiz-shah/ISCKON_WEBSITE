@@ -1,7 +1,10 @@
+import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Clock, MapPin, Users, Calendar } from "lucide-react";
+import { useLocation } from "wouter";
 import templeImage from "@assets/generated_images/Hindu_temple_exterior_architecture_b0c750ac.png";
 
 interface ScheduleItem {
@@ -66,12 +69,40 @@ const dailySchedule: ScheduleItem[] = [
 ];
 
 export default function DailySchedule() {
+  const [, setLocation] = useLocation();
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [selectedProgram, setSelectedProgram] = useState<ScheduleItem | null>(null);
+  const [isJoined, setIsJoined] = useState(false);
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    phone: ""
+  });
+
   const handleJoinProgram = (programId: string) => {
-    console.log(`Join program clicked: ${programId}`);
+    const program = dailySchedule.find(p => p.id === programId);
+    if (program) {
+      setSelectedProgram(program);
+      setIsDialogOpen(true);
+      setIsJoined(false);
+      setFormData({ name: "", email: "", phone: "" });
+    }
   };
 
   const handleViewFullSchedule = () => {
-    console.log('View full schedule clicked');
+    setLocation('/schedule');
+  };
+
+  const handleFormSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsJoined(true);
+  };
+
+  const handleCloseDialog = () => {
+    setIsDialogOpen(false);
+    setSelectedProgram(null);
+    setIsJoined(false);
+    setFormData({ name: "", email: "", phone: "" });
   };
 
   const getCategoryColor = (category: string) => {
@@ -219,6 +250,94 @@ export default function DailySchedule() {
           </div>
         </div>
       </div>
+
+      {/* Join Program Dialog */}
+      <Dialog open={isDialogOpen} onOpenChange={handleCloseDialog}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>
+              {isJoined ? "Successfully Joined!" : `Join ${selectedProgram?.title}`}
+            </DialogTitle>
+            <DialogDescription>
+              {isJoined 
+                ? `You have joined the group for ${selectedProgram?.title}.`
+                : `Fill in your details to join this program. We'll send you reminders and updates.`
+              }
+            </DialogDescription>
+          </DialogHeader>
+
+          {!isJoined ? (
+            <form onSubmit={handleFormSubmit} className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-foreground mb-2">
+                  Full Name *
+                </label>
+                <input
+                  type="text"
+                  value={formData.name}
+                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                  required
+                  className="w-full px-4 py-2 border border-input rounded-md bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+                  placeholder="Enter your name"
+                  data-testid="input-join-name"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-foreground mb-2">
+                  Email Address *
+                </label>
+                <input
+                  type="email"
+                  value={formData.email}
+                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                  required
+                  className="w-full px-4 py-2 border border-input rounded-md bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+                  placeholder="your@email.com"
+                  data-testid="input-join-email"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-foreground mb-2">
+                  Phone Number
+                </label>
+                <input
+                  type="tel"
+                  value={formData.phone}
+                  onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                  className="w-full px-4 py-2 border border-input rounded-md bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+                  placeholder="+91 98765 43210"
+                  data-testid="input-join-phone"
+                />
+              </div>
+
+              <Button
+                type="submit"
+                className="w-full bg-primary text-primary-foreground hover-elevate"
+                data-testid="button-join-submit"
+              >
+                Join Program
+              </Button>
+            </form>
+          ) : (
+            <div className="text-center py-6">
+              <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <svg className="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                </svg>
+              </div>
+              <p className="text-foreground font-medium mb-2" data-testid="text-joined-confirmation">Joined to the group</p>
+              <p className="text-sm text-muted-foreground mb-4">
+                We'll send you updates about {selectedProgram?.title}
+              </p>
+              <Button onClick={handleCloseDialog} variant="outline" className="w-full" data-testid="button-close-dialog">
+                Close
+              </Button>
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
     </section>
   );
 }

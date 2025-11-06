@@ -1,18 +1,24 @@
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Heart, Users, Book } from "lucide-react";
+import { useLocation } from "wouter";
 import heroImage from "@assets/generated_images/Krishna_Radha_temple_deities_d81c6210.png";
 
 export default function HeroSection() {
+  const [, setLocation] = useLocation();
+
   const handleLearnMore = () => {
-    console.log('Learn More clicked');
+    setLocation('/about');
   };
 
   const handleDonate = () => {
-    console.log('Donate clicked');
+    const donateSection = document.querySelector('[data-donate-section]');
+    if (donateSection) {
+      donateSection.scrollIntoView({ behavior: 'smooth' });
+    }
   };
 
   const handleJoinUs = () => {
-    console.log('Join Us clicked');
+    setLocation('/contact');
   };
 
   return (
