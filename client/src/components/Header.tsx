@@ -29,44 +29,32 @@ export default function Header() {
       <div className="max-w-6xl mx-auto px-4">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <Link href="/">
-            <a className="flex items-center gap-2">
-              <div className="w-10 h-10 bg-primary rounded-full flex items-center justify-center">
-                <span className="text-white font-serif font-bold text-lg">ॐ</span>
-              </div>
-              <div>
-                <div className="font-serif font-bold text-lg text-primary">ISKCON</div>
-                <div className="text-xs text-muted-foreground">Pune</div>
-              </div>
-            </a>
+          <Link href="/" className="flex items-center gap-2">
+            <div className="w-10 h-10 bg-primary rounded-full flex items-center justify-center">
+              <span className="text-white font-serif font-bold text-lg">ॐ</span>
+            </div>
+            <div>
+              <div className="font-serif font-bold text-lg text-primary">ISKCON</div>
+              <div className="text-xs text-muted-foreground">Pune</div>
+            </div>
           </Link>
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-8">
-            <Link href="/">
-              <a className={`transition-colors ${isActive('/') ? 'text-primary font-medium' : 'text-foreground hover:text-primary'}`}>
-                Home
-              </a>
+            <Link href="/" className={`transition-colors ${isActive('/') ? 'text-primary font-medium' : 'text-foreground hover:text-primary'}`}>
+              Home
             </Link>
-            <Link href="/about">
-              <a className={`transition-colors ${isActive('/about') ? 'text-primary font-medium' : 'text-foreground hover:text-primary'}`}>
-                About
-              </a>
+            <Link href="/about" className={`transition-colors ${isActive('/about') ? 'text-primary font-medium' : 'text-foreground hover:text-primary'}`}>
+              About
             </Link>
-            <Link href="/programs">
-              <a className={`transition-colors ${isActive('/programs') ? 'text-primary font-medium' : 'text-foreground hover:text-primary'}`}>
-                Programs
-              </a>
+            <Link href="/programs" className={`transition-colors ${isActive('/programs') ? 'text-primary font-medium' : 'text-foreground hover:text-primary'}`}>
+              Programs
             </Link>
-            <Link href="/schedule">
-              <a className={`transition-colors ${isActive('/schedule') ? 'text-primary font-medium' : 'text-foreground hover:text-primary'}`}>
-                Schedule
-              </a>
+            <Link href="/schedule" className={`transition-colors ${isActive('/schedule') ? 'text-primary font-medium' : 'text-foreground hover:text-primary'}`}>
+              Schedule
             </Link>
-            <Link href="/contact">
-              <a className={`transition-colors ${isActive('/contact') ? 'text-primary font-medium' : 'text-foreground hover:text-primary'}`}>
-                Contact
-              </a>
+            <Link href="/contact" className={`transition-colors ${isActive('/contact') ? 'text-primary font-medium' : 'text-foreground hover:text-primary'}`}>
+              Contact
             </Link>
           </nav>
 
@@ -95,30 +83,20 @@ export default function Header() {
         {isMenuOpen && (
           <div className="md:hidden py-4 border-t border-border">
             <nav className="flex flex-col space-y-4">
-              <Link href="/" onClick={closeMenu}>
-                <a className={`text-left transition-colors py-2 block ${isActive('/') ? 'text-primary font-medium' : 'text-foreground hover:text-primary'}`}>
-                  Home
-                </a>
+              <Link href="/" onClick={closeMenu} className={`text-left transition-colors py-2 block ${isActive('/') ? 'text-primary font-medium' : 'text-foreground hover:text-primary'}`}>
+                Home
               </Link>
-              <Link href="/about" onClick={closeMenu}>
-                <a className={`text-left transition-colors py-2 block ${isActive('/about') ? 'text-primary font-medium' : 'text-foreground hover:text-primary'}`}>
-                  About
-                </a>
+              <Link href="/about" onClick={closeMenu} className={`text-left transition-colors py-2 block ${isActive('/about') ? 'text-primary font-medium' : 'text-foreground hover:text-primary'}`}>
+                About
               </Link>
-              <Link href="/programs" onClick={closeMenu}>
-                <a className={`text-left transition-colors py-2 block ${isActive('/programs') ? 'text-primary font-medium' : 'text-foreground hover:text-primary'}`}>
-                  Programs
-                </a>
+              <Link href="/programs" onClick={closeMenu} className={`text-left transition-colors py-2 block ${isActive('/programs') ? 'text-primary font-medium' : 'text-foreground hover:text-primary'}`}>
+                Programs
               </Link>
-              <Link href="/schedule" onClick={closeMenu}>
-                <a className={`text-left transition-colors py-2 block ${isActive('/schedule') ? 'text-primary font-medium' : 'text-foreground hover:text-primary'}`}>
-                  Schedule
-                </a>
+              <Link href="/schedule" onClick={closeMenu} className={`text-left transition-colors py-2 block ${isActive('/schedule') ? 'text-primary font-medium' : 'text-foreground hover:text-primary'}`}>
+                Schedule
               </Link>
-              <Link href="/contact" onClick={closeMenu}>
-                <a className={`text-left transition-colors py-2 block ${isActive('/contact') ? 'text-primary font-medium' : 'text-foreground hover:text-primary'}`}>
-                  Contact
-                </a>
+              <Link href="/contact" onClick={closeMenu} className={`text-left transition-colors py-2 block ${isActive('/contact') ? 'text-primary font-medium' : 'text-foreground hover:text-primary'}`}>
+                Contact
               </Link>
               <Button 
                 onClick={handleDonate}
