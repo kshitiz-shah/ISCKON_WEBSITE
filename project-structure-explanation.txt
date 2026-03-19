@@ -1,0 +1,248 @@
+ISKCON WEBSITE PROJECT STRUCTURE EXPLAINED
+=========================================
+
+Project type
+------------
+This is a full-stack TypeScript project:
+- Frontend: React + Vite + Tailwind + shadcn/ui
+- Backend: Express (Node.js)
+- Shared layer: common TypeScript schema/types used by both client and server
+- Database tooling is prepared with Drizzle + PostgreSQL, but current runtime storage is in-memory
+
+
+ROOT FILES (what each one does)
+-------------------------------
+- package.json
+  Defines scripts and dependencies.
+  Key scripts:
+  - npm run dev   -> runs server in development (which also serves the React app with Vite middleware)
+  - npm run build -> builds frontend and bundles backend into dist/
+  - npm start     -> runs production server from dist/
+  - npm run check -> TypeScript type-check
+  - npm run db:push -> pushes Drizzle schema to DB
+
+- tsconfig.json
+  TypeScript compiler configuration for client, server, and shared folders.
+  Also defines path aliases like @/* and @shared/*.
+
+- vite.config.ts
+  Vite setup for the React app:
+  - React plugin
+  - aliases (@, @shared, @assets)
+  - build output to dist/public
+  - Replit-specific dev plugins
+
+- tailwind.config.ts
+  Tailwind theme setup (colors, fonts, animations, radius, etc.).
+  Includes custom spiritual color palette and typography.
+
+- postcss.config.js
+  PostCSS plugins configuration (Tailwind + Autoprefixer).
+
+- drizzle.config.ts
+  Drizzle ORM/kit config:
+  - schema source: shared/schema.ts
+  - migrations output: /migrations
+  - requires DATABASE_URL
+
+- components.json
+  shadcn/ui generator config (where UI components and utility aliases are located).
+
+- design_guidelines.md
+  Product/design direction document (colors, typography, spacing, spiritual aesthetic).
+
+- replit.md
+  Architecture notes and project context. Good for onboarding/documentation.
+
+
+FOLDER: attached_assets/
+------------------------
+- generated_images/
+  Static generated images used by UI sections (hero images, temple visuals, etc.).
+
+
+FOLDER: client/
+---------------
+Contains the React frontend.
+
+- client/index.html
+  HTML shell where React mounts.
+
+
+FOLDER: client/src/
+-------------------
+Main app source code.
+
+- main.tsx
+  Frontend entry point. Renders <App /> into #root and imports global CSS.
+
+- App.tsx
+  Application shell:
+  - sets up React Query provider
+  - sets up Tooltip and Toaster providers
+  - defines route switching using wouter
+  Routes:
+  /, /about, /programs, /schedule, /contact, and fallback 404
+
+- index.css
+  Global styles + Tailwind layers.
+  Defines CSS variables for light/dark themes and shared design tokens.
+
+
+FOLDER: client/src/pages/
+-------------------------
+Top-level route pages.
+
+- Home.tsx
+  Landing page composition using reusable section components.
+
+- About.tsx
+  About ISKCON Pune page (mission, values, history sections).
+
+- Programs.tsx
+  Program listing page with mock program data and a join dialog form.
+
+- Schedule.tsx
+  Daily schedule page, visitor info, timings, and highlights.
+
+- Contact.tsx
+  Contact page with a local-state form, contact cards, social buttons, and map placeholder.
+
+- not-found.tsx
+  404 fallback page shown for unknown routes.
+
+
+FOLDER: client/src/components/
+------------------------------
+Reusable UI sections used across pages.
+
+Core page section components:
+- Header.tsx
+  Top navigation bar, active route highlighting, desktop/mobile menu.
+
+- HeroSection.tsx
+  Home hero banner with CTA buttons and quick stats.
+
+- DevoteesCorner.tsx
+  Announcement cards section (currently mock content).
+
+- KrishnaConsciousness.tsx
+  Feature cards about teachings and spiritual path.
+
+- DivineHospitality.tsx
+  Service cards and visit CTA section.
+
+- DonationSection.tsx
+  Donation UI with category selection, suggested amounts, custom amount.
+  (Currently UI-only; no payment API integration yet.)
+
+- DailySchedule.tsx
+  Schedule cards and “join program” dialog.
+
+- WhatMakesUsDifferent.tsx
+  Differentiator cards and quote block.
+
+- Footer.tsx
+  Footer links, contact info, social actions, newsletter button.
+
+Other component directories:
+- components/ui/
+  Large set of shadcn/ui primitive components (accordion, dialog, button, toast, etc.).
+  These are reusable building blocks used by custom sections/pages.
+
+- components/examples/
+  Example/demo component versions (reference variants, not core routing pages).
+
+
+FOLDER: client/src/hooks/
+-------------------------
+- use-mobile.tsx
+  Hook for responsive mobile breakpoint detection.
+
+- use-toast.ts
+  Global toast state manager/helper used by toaster UI.
+
+
+FOLDER: client/src/lib/
+-----------------------
+- queryClient.ts
+  React Query client setup + helper for API requests and fetch error handling.
+
+- utils.ts
+  Utility function `cn()` for merging Tailwind class names safely.
+
+
+FOLDER: server/
+---------------
+Express backend and Vite integration.
+
+- index.ts
+  Main server entry:
+  - sets JSON parsing middleware
+  - request logging middleware for /api
+  - registers routes
+  - error middleware
+  - dev mode: sets up Vite middleware
+  - prod mode: serves built static app
+
+- routes.ts
+  API route registration point.
+  Currently scaffolded and ready for custom /api endpoints.
+
+- storage.ts
+  Storage abstraction layer:
+  - IStorage interface
+  - MemStorage implementation (in-memory users map)
+  Current app uses this in-memory storage, not persistent DB at runtime yet.
+
+- vite.ts
+  Development/production serving helpers:
+  - setupVite() attaches Vite middleware for HMR in dev
+  - serveStatic() serves built frontend files in production
+  - log() helper for timestamped logs
+
+
+FOLDER: shared/
+---------------
+Code shared between frontend and backend.
+
+- schema.ts
+  Drizzle schema for users table + zod insert schema + exported TS types.
+  This is the contract layer for user data shape.
+
+
+HOW DATA FLOWS (current state)
+------------------------------
+- Frontend pages/components mostly use local state and mock arrays for content.
+- API layer scaffolding exists (React Query + server routes + storage abstraction).
+- User schema exists in shared/ for future real backend/database usage.
+- Database migration tooling is configured but actual runtime APIs are not yet implemented.
+
+
+IMPORTANT OBSERVATIONS
+----------------------
+1) The project is strongly scaffolded for scale:
+   - clean folder separation (client/server/shared)
+   - reusable UI system (shadcn)
+   - ready-to-extend API architecture.
+
+2) A lot of UI interactions currently use console.log or local-only state.
+   This means many features are present visually but not yet connected to backend services.
+
+3) You can safely add real features next in these places:
+   - server/routes.ts for API endpoints
+   - server/storage.ts (or DB-backed storage implementation)
+   - client/src/lib/queryClient.ts + page components for actual API integration.
+
+
+QUICK START MENTAL MODEL
+------------------------
+If you are new to this codebase, read files in this order:
+1) package.json (scripts)
+2) server/index.ts (how app runs)
+3) client/src/main.tsx + App.tsx (frontend boot + routing)
+4) client/src/pages/Home.tsx (composition pattern)
+5) one section component like HeroSection.tsx
+6) shared/schema.ts and server/storage.ts (data contracts + storage abstraction)
+
+That gives you a complete understanding of how this project is organized end-to-end.
